@@ -6,7 +6,8 @@ const refs = {
   gallery: document.querySelector(".js-gallery"),
   lightbox: document.querySelector(".js-lightbox"),
   lightboxImage: document.querySelector(".lightbox__image"),
-  lightboxButton: document.querySelector('button[data-action="close-lightbox"]')
+  lightboxButton: document.querySelector('button[data-action="close-lightbox"]'),
+  lightboxOverlay: document.querySelector('div.lightbox__overlay')
 };
 
 function CreateGalleryItems() {
@@ -48,6 +49,10 @@ refs.gallery.addEventListener("click", openLightbox);
 
 function openLightbox(e) {
   e.preventDefault();
+  
+ if (e.target.nodeName !== 'IMG') {
+    return;
+  }
 
   const target = e.target;
   const bigImgSrc = target.dataset.source;
@@ -63,4 +68,14 @@ refs.lightboxButton.addEventListener("click", closeLightbox);
 function closeLightbox() {
   refs.lightbox.classList.remove("is-open");
   refs.lightboxImage.src = "";
+  
 }
+
+refs.lightboxOverlay.addEventListener("click", closeOverlay);
+
+function closeOverlay(event) {
+  if (event.target !== event.currentTarget) {
+    return;
+  }
+  closeLightbox();
+} 
